@@ -18,93 +18,141 @@ Antes de sumergirnos en Axios, es importante mencionar que, en el pasado, una de
 
 Con la llegada de nuevas tecnologías como Axios, podemos realizar peticiones con una sintaxis más limpia y eliminando la necesidad de escribir múltiples confirmaciones, lo que hace que el código sea más legible y mantenible.
 
-#### Petición XHR
-``` javascript
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'https://ejemplo.com/api/datos.json', true);
-xhr.onload = function() {
-  if (xhr.status === 200) {
-    var datos = JSON.parse(xhr.responseText);
-    console.log(datos); // Datos en formato JSON
-  }
-};
-xhr.send();
-```
-
-#### Petición Axios
-``` javascript
-// Realizar una solicitud GET a la API de Rick and Morty
-
-axios.get('https://rickandmortyapi.com/api/character/?page=1')
-.then(function (respuesta) {
-  // Manejar la respuesta exitosa
-  console.log('Datos obtenidos:', respuesta.data.results);
-})
-.catch(function (error) {
-  // Manejar cualquier error que ocurra durante la solicitud
-  console.error('Error:', error);
-});
-```
-<br>
-<br>
-
 # Instalaciones necesarias
 
-1. [Node.js](https://nodejs.org/es/)
+1. [Visual Studio Code](https://code.visualstudio.com/)
 
-2. [Visual Studio Code](https://code.visualstudio.com/)
+2. [Extensión Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
 
-3. [Extensión Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
-
-4. [Axios](https://axios-http.com/es/docs/intro)
-
-<br>
-<br>
+3. [Axios](https://axios-http.com/es/docs/intro)
 
 # Primeros pasos en Axios
 
-Antes de empezar, veremos las partes de una petición get con Axios utilizando **[.then()](https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Using_promises)** o **[Async + await](https://es.javascript.info/async-await)**.
+Antes de empezar, veremos las partes de una petición get con Axios utilizando **[Async + await](https://es.javascript.info/async-await)** y [try catch](https://es.javascript.info/try-catch).
 
-## Petición Axios con .then()
+## Petición Axios con Async + await
 
-Veremos la petición con **.then()** en pequeñas partes para entenderla mejor.
-
-``` javascript
-axios.get('URL')
-```
-
-Utilizamos el objeto axios con el método get, apuntando a la URL de donde queremos sacar la información.
+Veremos la siguiente petición en pequeñas partes para entenderla mejor.
 
 ``` javascript
-axios.get('URL')
-.then(function (datos) {
-  console.log('Datos obtenidos:', datos);
-})
-```
+const obtenerGato = async () => {
+  try {
+    const respuesta = await axios.get('https://api.thecatapi.com/v1/images/search');
+    console.log('Datos obtenidos:', respuesta);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
-**.then()**  es el manejador de la promesa para una respuesta exitosa. Cuando la solicitud se completa con éxito utilizamos un [Callback](https://developer.mozilla.org/es/docs/Glossary/Callback_function) y le asignamos como argumento la variable en la que se almacena la respuesta. En este caso, la respuesta se almacena en la variable **datos**, y veremos los datos en consola.
+obtenerGato();
+```
 
 ``` javascript
-axios.get('URL')
-.then(function (datos) {
-  console.log('Datos obtenidos:', datos);
-})
-.catch(function (error) {
-  console.error('Error:', error);
-});
+const obtenerGato = async () => {
+  //petición
+}
+```
+En esta parte usamos la palabra async para indicarle a JavaScript que estamos trabajando con una función asincrónica pero la definimos como una **constante**. La razón de esto es para proteger la "integridad" de la función, porque en algún punto podríamos hacer algo como esto:
+
+``` javascript
+obtenerGato = 5;
 ```
 
-**.catch()** es el manejador de errores de la promesa y se ejecuta únicamente cuando nuestra respuesta es fallida.
+Si eso ocurre nuestra aplicación estaría completamente arruinada por una línea, pero evitamos este problema con **const**, ya que no permitirá cambiar el valor de la función.
 
-**.catch()** contiene el error, y al igual que en **.then()**, utilizamos un [Callback](https://developer.mozilla.org/es/docs/Glossary/Callback_function) en donde almacenamos el error en la variable **error**, y posteriormente lo visualizaremos en consola.
+``` javascript
+const obtenerGato = async () => {
+  try {
+  } catch (error) {
 
-## Petición Axios con Async + Await
+  }
+}
+```
 
-falta
+Utilizamos try catch para tener un manejo personalizado del flujo dependiendo del resultado. **try** es el espacio en el que ponemos el código a ejecutar. **catch** es el manejador de los errores dándonos la posibilidad de manejar el código de una manera específica, si no utilizamos un try catch estamos permitiendo que los errores manejen nuestra aplicación y corten la ejecución en algún punto.
 
-# Aplicación práctica de Axios
+``` javascript
+catch (error)
+```
+
+Y utilizamos **(error)** para recibir el error dentro de la variable llamada **error**, y posteriormente usarlo.
+
+``` javascript
+async function obtenerGato() {
+  try {
+    const respuesta = await axios.get('https://api.thecatapi.com/v1/images/search');
+    console.log('Datos obtenidos:', respuesta);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+obtenerGato();
+```
+
+Al igual que antes, usamos **const** para la variable **respuesta** y mantener su naturaleza con el tiempo, siempre será una respuesta.
+
+Utilizamos el objeto axios con el método **GET** apuntando a la URL de donde queremos sacar la información.
+
+Luego mostramos en consola el resultado y finalmente, con **catch**, mostramos el error en consola.
+
+# Aplicación práctica
 
 ## Ejemplo 1
+
+Haremos una petición a la API de [The Cat API](https://thecatapi.com/) y mostraremos los datos en la consola del navegador. Seguiremos estos pasos:
+
+1. Trabajaremos en una carpeta base llamada **01-gatos** y crearemos dos archivos: **gatos.html y gatos.js**
+
+    ![Alt text](/01-Axios-js/imagenes/archivos-gatos.png)
+
+2. En **gatos.html** hacemos la estructura básica de un archivo HTML, ponemos el CDN que encontramos en la [documentación de Axios](https://axios-http.com/es/docs/intro), y debajo de este ponemos la referencia a nuestro **gatos.js** se verá así:
+
+``` HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axios - gatitos</title>
+</head>
+<body>
+
+  <!-- CDN de Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="gatos.js"></script>
+</body>
+</html>
+```
+
+3. En **gatos.js** usaremos el código de ejemplo que vimos en la introducción, quedaría así:
+
+``` javascript
+async function obtenerGato() {
+  try {
+    const respuesta = await axios.get('https://api.thecatapi.com/v1/images/search');
+    console.log('Datos obtenidos:', respuesta);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+obtenerGato();
+```
+
+4. Esta parte es importante, porque lo que haremos ahora es usar la extensión [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) de Visual Studio Code.
+
+    - Primero, nos posicionamos en el archivo **gatos.html** y ejecutamos Live Server.
+
+      ![Alt text](/01-Axios-js/imagenes/live-server.png)
+
+    - Ahora, en la página que nos abre Live Server, presionamos la tecla F12 para abrir las DevTools, y nos dirigimos a la **consola**, veremos algo como esto:
+
+      ![Alt text](/01-Axios-js/imagenes/consola-json-contraido.png)
+
+    - Le damos click a ese elemento **Object** y lo abrimos, veremos algo como esto
+
+## Ejemplo 2 (Falta por actualizar)
 
 Traeremos información de la API de Rick & Morty, y la veremos en la consola del navegador. Para ello seguiremos estos pasos:
 
@@ -134,11 +182,14 @@ Traeremos información de la API de Rick & Morty, y la veremos en la consola del
 
 3. En el archivo index.js ponemos el siguiente código:
 ``` javascript
-axios.get('https://rickandmortyapi.com/api/character/?page=1')
-.then(function (respuesta) {
-  console.log('Datos obtenidos:', respuesta.data.results);
-})
-.catch(function (error) {
-  console.error('Error:', error);
-});
+async function obtenerDatos() {
+  try {
+    const respuesta = await axios.get('https://rickandmortyapi.com/api/character/?page=1');
+    console.log('Datos obtenidos:', respuesta.data.results);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+obtenerDatos();
 ```
