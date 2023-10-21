@@ -2,7 +2,7 @@
 
 ### ¿Qué hay en este documento?
 
-Este documento fue creado con fines educativos para explicar cómo usar la librería Axios en un nivel básico.
+Este documento fue creado con fines educativos para explicar cómo usar la librería Axios en un nivel básico con el método GET.
 
 # Tabla de contenidos
 
@@ -23,8 +23,6 @@ Con la llegada de nuevas tecnologías como Axios, podemos realizar peticiones co
 1. [Visual Studio Code](https://code.visualstudio.com/)
 
 2. [Extensión Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
-
-3. [Axios](https://axios-http.com/es/docs/intro)
 
 # Primeros pasos en Axios
 
@@ -150,46 +148,87 @@ obtenerGato();
 
       ![Alt text](/01-Axios-js/imagenes/consola-json-contraido.png)
 
-    - Le damos click a ese elemento **Object** y lo abrimos, veremos algo como esto
+    - Le damos click a ese elemento **Object** y lo abrimos, veremos algo así:
 
-## Ejemplo 2 (Falta por actualizar)
+      ![Alt text](/01-Axios-js/imagenes/consola-json-expandido.png)
 
-Traeremos información de la API de Rick & Morty, y la veremos en la consola del navegador. Para ello seguiremos estos pasos:
+       #### Primer ejercicio
+    - Podemos ver varios elementos, la primera tarea es acceder al elemento **data** de este JSON mediante el archivo de gatos.js que tenemos en nuestro IDE.
 
-1. Trabajaremos en una carpeta base llamada **01-Axios-js** y crearemos dos archivos, **index.html e index.js**
+    - **Nota.** Puede ser de ayuda entender que trabajamos con un objeto y tenemos que acceder a su propiedad, y que la respuesta está en manipular lo que tenemos dentro del **try**.
 
-![Alt text](./imagenes/archivos-iniciales.png)
+      #### Segundo ejercicio
 
-2. En el **index.html** ponemos este código:
+    - La siguiente tarea es acceder al elemento **0** dentro del JSON, este ejercicio es distinto porque se encuentra dentro de un **Array**, como vemos acá:
 
-``` html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Axios</title>
-</head>
-<body>
+      ![Alt text](/01-Axios-js/imagenes/json-array.png)
 
-  <!--CDN de Axios-->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <!--Referencia a nuestro index.js-->
-  <script src="index.js"></script>
-</body>
-</html>
-```
+      **Nota.** Realmente estaríamos hablando de que esta es la estructura del objeto:
 
-3. En el archivo index.js ponemos el siguiente código:
-``` javascript
-async function obtenerDatos() {
-  try {
-    const respuesta = await axios.get('https://rickandmortyapi.com/api/character/?page=1');
-    console.log('Datos obtenidos:', respuesta.data.results);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
+        ![Alt text](/01-Axios-js/imagenes/json-array-ejemplo.png)
 
-obtenerDatos();
-```
+      Si hablaramos de que estamos pidiendo 3 gatos y no 1, la estructura de **data** sería algo así:
+
+      ![Alt text](/01-Axios-js/imagenes/json-3-gatitos.png)
+
+      Teniendo eso en cuenta, la instrucción es acceder a la única posición del arreglo.
+
+      Para finalizar este punto, luego de acceder al arreglo, vamos a tener acceso a las propiedades del objeto (**id**, **url**, **width** y **height**), pero ahora vamos a acceder a la url.
+
+      #### Cuarto ejercicio
+
+      Vamos a crear una imagen con base en la URL que obtuvimos del punto anterior, para ello usaremos este código base:
+
+      ``` javascript
+        async function obtenerGato() {
+          try {
+            const respuesta = await axios.get('https://api.thecatapi.com/v1/images/search');
+            return ('Datos obtenidos:', respuesta);
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        }
+
+        async function mostrarImagenGato() {
+          const imagenUrl = await obtenerGato();
+          if (imagenUrl) {
+            const imagen = document.createElement("img");
+            imagen.src = imagenUrl;
+            document.body.appendChild(imagen);
+          }
+        }
+
+        mostrarImagenGato();
+      ```
+
+      **Nota.** Las diferencias de este código son:
+        - La variable respuesta, se debe poner el acceso a la URL nuevamente.
+        - Hacemos un retorno. En la línea que mostramos la respuesta en consola ya no hacemos un **console.log**, en este caso retornamos la respuesta.
+
+      **Aspectos a considerar:** 
+       - Ahora llamamos a la función **obtenerGato( )** dentro de otra función asíncrona, y con el **await** se indica que el valor se asigna en la variable hasta que se termine de ejecutar **obtenerGato( )**.
+
+       ``` javascript
+        const imagen = document.createElement("img");
+        imagen.src = imagenUrl;
+        document.body.appendChild(imagen);
+       ```
+        - En la primera sentencia es donde se indica que crearemos un elemento de tipo **imagen** en nuestro HTML, luego a esta imagen le cambiamos el atributo **src** y le asignamos el valor que enviamos desde **obtenerGato( )**, y ahora tenemos nuestra imagen lista.
+
+        - Después, usamos **appendChild** para pintar este elemento en nuestro HTML.
+
+    ### Resultado
+
+    - El resultado de nuestro código debería ser algo parecido a esto:
+
+    ![Alt text](/01-Axios-js/imagenes/gatito-1.png)
+
+    - Recargamos la página y obtenemos una nueva imagen:
+
+    ![Alt text](/01-Axios-js/imagenes/gatito-2.png)
+
+    ![Alt text](/01-Axios-js/imagenes/gatito-3.png)
+
+   Listo! Has terminado el taller, gracias por llegar hasta acá.
+
+    ![Alt text](/01-Axios-js/imagenes/baby-yoda-thank-you.gif)
