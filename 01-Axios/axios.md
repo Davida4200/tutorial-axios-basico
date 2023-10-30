@@ -97,9 +97,9 @@ Luego mostramos en consola el resultado y finalmente, con **catch**, mostramos e
 
 Haremos una petición a la API de [The Cat API](https://thecatapi.com/) y mostraremos los datos en la consola del navegador. Seguiremos estos pasos:
 
-1. Trabajaremos en una carpeta base llamada **01-gatos** y crearemos dos archivos: **gatos.html y gatos.js**
+1. Trabajaremos en una carpeta base llamada **01-Axios** y crearemos dos archivos: **gatos.html y gatos.js**
 
-![Alt text](/01-Axios/imagenes/archivos-gatos.png)
+![Alt text](./imagenes/archivos.png)
 
 2. En **gatos.html** hacemos la estructura básica de un archivo HTML, ponemos el CDN que encontramos en la [documentación de Axios](https://axios-http.com/es/docs/intro), y debajo de este ponemos la referencia a nuestro **gatos.js** se verá así:
 
